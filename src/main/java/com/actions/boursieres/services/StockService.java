@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StockService {
     private final StockRepository stockRepository;
+    private final StockPriceService stockPriceService;
 
     public Stock addStock(Stock stock){
         return  stockRepository.save(stock);
@@ -21,7 +22,11 @@ public class StockService {
     }
 
     public Stock getStockBySymbol(String symbol){
-        return stockRepository.findByTickerSymbol(symbol)
+        Stock stock = stockRepository.findByTickerSymbol(symbol)
                 .orElseThrow(() -> new RuntimeException("Stock no found"));
+
+        // Mettre à jour le prix en temps réel
+        stock.setCurrentPrice(stockPriceService.getRealTimeStockPrice(symbol));
+        return stock;
     }
 }

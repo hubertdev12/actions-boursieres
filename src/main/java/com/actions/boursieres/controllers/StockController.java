@@ -1,6 +1,7 @@
 package com.actions.boursieres.controllers;
 
 import com.actions.boursieres.entities.Stock;
+import com.actions.boursieres.services.StockPriceService;
 import com.actions.boursieres.services.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StockController {
     private final StockService stockService;
+    private final StockPriceService stockPriceService;
 
     /**
      * Ajouter une action
@@ -41,5 +43,10 @@ public class StockController {
     @GetMapping("/{symbol}")
     public ResponseEntity<Stock> getStock(@PathVariable String symbol){
         return ResponseEntity.ok(stockService.getStockBySymbol(symbol));
+    }
+
+    @GetMapping("/{symbol}/price")
+    public ResponseEntity<Double> getStockPrice(@PathVariable String symbol){
+        return ResponseEntity.ok(stockPriceService.getRealTimeStockPrice(symbol));
     }
 }
