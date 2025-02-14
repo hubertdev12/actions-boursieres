@@ -2,6 +2,7 @@ package com.actions.boursieres.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,12 +26,9 @@ public class StockPriceService {
      * @param symbol
      * @return
      */
+    @Cacheable(value = "stockPrices", key = "#symbol", unless = "#result == null")
     public Double getRealTimeStockPrice(String symbol){
-        System.out.println("API KEY : " + apiKey);
-        System.out.println("API KEY : " + apiUrl);
         String url = String.format("%s?function=%s&symbol=%s&interval=5min&apikey=%s", apiUrl, TIME_SERIES_INTRADAY, symbol, apiKey);
-
-        System.out.println("URL : " + url);
 
         ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
         Map<String, Object> body = response.getBody();

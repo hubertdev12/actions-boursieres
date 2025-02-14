@@ -21,12 +21,13 @@ public class StockService {
         return stockRepository.findAll();
     }
 
+    /**
+     *
+     * @param symbol
+     * @return
+     */
     public Stock getStockBySymbol(String symbol){
-        Stock stock = stockRepository.findByTickerSymbol(symbol)
+        return stockRepository.findByTickerSymbol(symbol)
                 .orElseThrow(() -> new RuntimeException("Stock no found"));
-
-        // Mettre à jour le prix en temps réel
-        stock.setCurrentPrice(stockPriceService.getRealTimeStockPrice(symbol));
-        return stock;
     }
 }
