@@ -33,6 +33,8 @@ public class StockPriceService {
         ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
         Map<String, Object> body = response.getBody();
 
+        System.out.println("body: " + body);
+
         if(body == null || !body.containsKey("Time Series (5min)")){
             throw new RuntimeException("Données non disponibles pour " + symbol);
         }

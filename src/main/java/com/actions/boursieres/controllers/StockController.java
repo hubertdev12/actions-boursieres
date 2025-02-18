@@ -1,6 +1,8 @@
 package com.actions.boursieres.controllers;
 
 import com.actions.boursieres.entities.Stock;
+import com.actions.boursieres.entities.StockPriceHistory;
+import com.actions.boursieres.services.StockPriceHistoryService;
 import com.actions.boursieres.services.StockPriceService;
 import com.actions.boursieres.services.StockService;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +17,14 @@ import java.util.List;
 public class StockController {
     private final StockService stockService;
     private final StockPriceService stockPriceService;
+    private final StockPriceHistoryService stockPriceHistoryService;
 
     /**
      * Ajouter une action
      * @param stock
      * @return
      */
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<Stock> addStock(@RequestBody Stock stock){
         return ResponseEntity.ok(stockService.addStock(stock));
     }
@@ -48,5 +51,10 @@ public class StockController {
     @GetMapping("/{symbol}/price")
     public ResponseEntity<Double> getStockPrice(@PathVariable String symbol){
         return ResponseEntity.ok(stockPriceService.getRealTimeStockPrice(symbol));
+    }
+
+    @GetMapping("/{symbol}/history")
+    public ResponseEntity<List<StockPriceHistory>> getStockPriceHistory(@PathVariable String symbol){
+        return ResponseEntity.ok(stockPriceHistoryService.getPriceHistory(symbol));
     }
 }
